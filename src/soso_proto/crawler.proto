@@ -1,0 +1,9 @@
+package soso_proto;
+message soso_crawler
+{
+    optional string    query = 1;  // query
+    optional string    engine =  2;  // engine
+    optional string    url = 3; // most important 
+    optional string    ua = 4;
+    optional string    sleeptime = 5;
+}
