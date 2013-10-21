@@ -61,5 +61,29 @@ func (m *SosoCrawler) GetSleeptime() string {
 	return ""
 }
 
+type SosoCrawlerResp struct {
+	Status           *int32  `protobuf:"varint,1,req,name=status" json:"status,omitempty"`
+	Content          *string `protobuf:"bytes,2,opt,name=content" json:"content,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *SosoCrawlerResp) Reset()         { *m = SosoCrawlerResp{} }
+func (m *SosoCrawlerResp) String() string { return proto.CompactTextString(m) }
+func (*SosoCrawlerResp) ProtoMessage()    {}
+
+func (m *SosoCrawlerResp) GetStatus() int32 {
+	if m != nil && m.Status != nil {
+		return *m.Status
+	}
+	return 0
+}
+
+func (m *SosoCrawlerResp) GetContent() string {
+	if m != nil && m.Content != nil {
+		return *m.Content
+	}
+	return ""
+}
+
 func init() {
 }

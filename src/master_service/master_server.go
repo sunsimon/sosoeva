@@ -23,15 +23,19 @@ func main() {
     config_reader_err := config_reader.Read()
     log.Println(config_reader_err)
 
-    service_port := config_reader.Get("SERVER", "port")
+
+    service_port := config_reader.Get("MASTER_SERVER", "port")
     log.Println("service port :", service_port)
-    ip_interface_string:= config_reader.Get("SERVER", "ip_interface")
+    ip_interface_string:= config_reader.Get("MASTER_SERVER", "ip_interface")
     log.Println("ip interface :", ip_interface_string)
     ip_interface_num, _ := strconv.Atoi(ip_interface_string)
 
     service := ssn_net.GetIP(ip_interface_num) + ":" + service_port
-
     log.Println("service ip:", service)
+
+    download_port := config_reader.Get("MASTER_SERVER", "download_port")
+    download_server_ip :=  ssn_net.GetIP(ip_interface_num) + ":" + download_port
+    log.Println("download server ip:", download_server_ip)
 
     listener, err := net.Listen("tcp", service)
     ssn_utils.CheckError(err, "service listen")
@@ -43,14 +47,12 @@ func main() {
         ssn_utils.CheckError(err, "server: accept")
         log.Printf("server: accepted from %s", conn.RemoteAddr())
 
-        go handleClient(conn, "0")
+        go handleClient(conn, download_server_ip)
     }
 }
 
-func handleClient(conn net.Conn, optional string) {
+func handleClient(conn net.Conn,  download_server_ip string) {
     defer conn.Close()
-
-    log.Println("optional = ", optional)
 
     buf := make([]byte, MAX_RECEIVE)
     for {
@@ -85,9 +87,14 @@ func handleClient(conn net.Conn, optional string) {
         mm.Sleep_Time = 1
 
         
-        content := deliver(mm) 
+        content := deliver(mm, download_server_ip) 
 
-        n, err = conn.Write([]byte(content))
+        res := &soso_proto.SosoCrawlerResp{}
+        res.Status = proto.Int32(1)
+        res.Content= proto.String(content)
+        res_buf, _ := proto.Marshal(res)
+
+        n, err = conn.Write(res_buf)
         log.Printf("server: conn: wrote %d bytes", n)
 
         if err != nil {
@@ -98,10 +105,9 @@ func handleClient(conn net.Conn, optional string) {
     log.Println("server: conn: closed")
 }
 
-func deliver(mm *common.Message) (res string) {
-    server_ip := "218.246.34.209:9999"
+func deliver(mm *common.Message, download_server_ip string) (res string) {
     start_time := time.Now()
-    raddr,e := net.ResolveTCPAddr("tcp", server_ip)
+    raddr,e := net.ResolveTCPAddr("tcp", download_server_ip)
     if e != nil {
         log.Println("Resolev TCP error. ", e)
     }

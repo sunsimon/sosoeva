@@ -9,9 +9,15 @@ import (
     "net"
     "ssn/ssn_utils"
     "io"
+    "flag"
+    "os"
 )
 
+    
 func main() {
+    server_ip := flag.String("p", "127.0.0.1", "master server ip")
+    flag.Parse()
+
     c := &soso_proto.SosoCrawler{}
     c.Ua = proto.String("hello world")
     c.Query = proto.String("hello world")
@@ -21,11 +27,11 @@ func main() {
 
     start_time := time.Now()
 
-    server_ip := "218.246.34.209:9998"
 
-    raddr,e := net.ResolveTCPAddr("tcp", server_ip)
+    raddr,e := net.ResolveTCPAddr("tcp", *server_ip)
     if e != nil {
         log.Println("Resolev TCP error. ", e)
+        os.Exit(1)
     }
 
     con, err := net.DialTCP("tcp", nil, raddr)
@@ -56,6 +62,9 @@ func main() {
         html_string += string(buf[0:n])
     }
 
-    log.Println("result :", html_string)
+    res := &soso_proto.SosoCrawlerResp{}
+    err = proto.Unmarshal([]byte(html_string), res)
+
+    log.Println("result :", res.GetContent())
     log.Println("time=", time.Since(start_time))
 }
