@@ -1,4 +1,4 @@
-package main 
+//package main 
 
 
 import proto "code.google.com/p/goprotobuf/proto"
@@ -8,6 +8,7 @@ import (
     "time"
     "net"
     "ssn/ssn_utils"
+    "ssn/ssn_config"
     "io"
     "flag"
     "os"
@@ -26,7 +27,6 @@ func main() {
 
 
     start_time := time.Now()
-
 
     raddr,e := net.ResolveTCPAddr("tcp", *server_ip)
     if e != nil {

@@ -6,6 +6,7 @@ message soso_crawler
     optional string    url = 3; // most important 
     optional string    ua = 4;
     optional string    sleeptime = 5;
+    optional bool    phantomjs = 6; //use phantomjs to crawl
 }
 
 message soso_crawler_resp

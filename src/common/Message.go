@@ -5,6 +5,9 @@ import (
     "log"
     "net/http"
     "time"
+    "os/exec"
+    "strings"
+    "bytes"
 )
 
 type Message struct {
@@ -13,7 +16,15 @@ type Message struct {
     Url string
     User_Agent string
     Sleep_Time int
-    //Time int64
+    Is_Use_Phantomjs bool
+}
+
+func (m Message) GetContent()(content string) {
+    if m.Is_Use_Phantomjs {
+        return m.GetContentByPhantomjs()
+    } else {
+        return m.GetHttpContent()
+    }
 }
 
 
@@ -49,4 +60,17 @@ func (m Message) GetHttpContent() (content string) {
     log.Println(time.Since(start_time))
 
     return (string(body))
+}
+
+func (m Message) GetContentByPhantomjs()(content string) {
+    cmd := exec.Command("./tools/phantomjs", "./tools/download.js",  m.Url, m.User_Agent)
+    cmd.Stdin = strings.NewReader("some input")
+    var out bytes.Buffer
+    cmd.Stdout = &out
+    err := cmd.Run()
+    if err != nil {
+        log.Println(err)
+        return "000"
+    }
+    return out.String()
 }

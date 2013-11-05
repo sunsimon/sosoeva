@@ -19,6 +19,7 @@ type SosoCrawler struct {
 	Url              *string `protobuf:"bytes,3,opt,name=url" json:"url,omitempty"`
 	Ua               *string `protobuf:"bytes,4,opt,name=ua" json:"ua,omitempty"`
 	Sleeptime        *string `protobuf:"bytes,5,opt,name=sleeptime" json:"sleeptime,omitempty"`
+	Phantomjs        *bool   `protobuf:"varint,6,opt,name=phantomjs" json:"phantomjs,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
@@ -59,6 +60,13 @@ func (m *SosoCrawler) GetSleeptime() string {
 		return *m.Sleeptime
 	}
 	return ""
+}
+
+func (m *SosoCrawler) GetPhantomjs() bool {
+	if m != nil && m.Phantomjs != nil {
+		return *m.Phantomjs
+	}
+	return false
 }
 
 type SosoCrawlerResp struct {
