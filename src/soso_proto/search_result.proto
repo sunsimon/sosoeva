@@ -1,0 +1,31 @@
+// Copyright (c) 2013, Tencent Inc.
+// All rights reserved
+//
+// Author: Manzhao BU <chillbu@tencent.com>
+//
+package soso_proto;
+
+message SearchResult {
+    required int32 rank = 1;
+    required int32 index = 2;
+    required int32 parent_index = 3;
+    required int32 children_num = 4;
+    required bool has_script = 5;
+    required bytes html = 6;	
+    optional bytes url = 7;
+    optional bytes docid = 8;
+    optional bytes title = 9;
+    optional bytes abstract = 10;
+    optional bytes path = 11;
+    optional bytes node_info = 12;
+    optional bytes structure = 13;
+    optional bytes analyse_structure = 14;
+    optional bytes type_string = 15;
+    optional bytes analyse_type_string = 16;
+	optional int32 feature_id = 17 [default = 0];
+	optional int32 structure_id = 18 [default = 0];
+	optional int32 node_info_id = 19 [default = 0];
+	optional int32 type_string_id = 20 [default = 0];
+	optional int32 base_class_id = 21 [default = 0];
+}
+

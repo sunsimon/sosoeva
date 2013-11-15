@@ -1,0 +1,22 @@
+// Copyright (c) 2013, Tencent Inc.
+// All rights reserved
+//
+// Author: Manzhao BU <chillbu@tencent.com>
+//
+// Defnine SrpprsService[Search Result Page Parse Recognize Service]
+
+import "evasys/srpprs/proto/search_result_page.proto";
+
+package evasys;
+
+// The server side serivce.
+service SrpprsService {	
+    rpc Parse(SearchResultPageRequest) returns(SearchResultPageResponse);
+    
+	rpc ParseAndRecognizeReadOnly(SearchResultPageRequest) returns(SearchResultPageResponse);
+	
+	rpc ParseAndRecognize(SearchResultPageRequest) returns(SearchResultPageResponse);
+    
+	rpc SrssParse(SearchResultPageRequest) returns(SearchResultPageResponse);
+}
+

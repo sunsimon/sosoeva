@@ -1,0 +1,102 @@
+// Copyright 2012, Tencent Inc.
+// Author: chillbu <chillbu@tencent.com>
+//
+package evasys;
+
+//import "poppy/rpc_option.proto";
+import "evasys/srpprs/proto/search_result.proto";
+
+message SearchByIDRequest {    
+    required int32 id = 1;
+	optional bytes engine = 2;
+}
+
+message SearchFeatureByContentRequest {    
+    required bytes content = 1;
+	required bytes engine = 2;
+	required bytes type = 3;
+}
+
+message SearchBaseClassByContentRequest {    
+    required int32 structure_id = 1;
+    required int32 node_info_id = 2;
+    required int32 type_string_id = 3;
+	required bytes url = 4;
+	required bytes title = 5;
+	required bytes html = 6;
+	required bytes type_string = 7;
+	optional bytes engine = 8;
+}
+
+message SearchFeatureResponse {
+    required int32 retcode = 1;//返回码:0表示成功;1表示未命中
+    required bytes rettext = 2;//返回码的文字描述
+    optional int32 id = 3 [default = 0];//特征ID，0表示为命中
+	optional bytes type = 4;//特征类型
+    optional int32 status = 5;//特征状态：0==未标注;1==已标注
+	optional bytes engine = 6;//引擎
+	optional bytes create_time = 7;//创建时间
+	optional bytes content = 8;//特征内容
+	optional bytes update_time = 9;//更新时间
+	optional bytes editor = 10;//编辑者
+	optional bytes name = 11;//特征名称
+	optional bytes desc = 12;//特征描述	
+}
+
+message SearchBaseClassResponse {
+    required int32 retcode = 1;//返回码:0表示成功;1表示未命中
+    required bytes rettext = 2;//返回码的文字描述
+    optional int32 id = 3 [default = 0];//基础分类ID，0表示为命中
+    optional int32 feature_id = 4;//创建基础分类的特征ID
+    optional int32 structure_id = 5;
+    optional int32 node_info_id = 6;
+    optional int32 type_string_id = 7;
+	optional bytes url = 8;
+	optional bytes title = 9;
+	optional bytes html = 10;
+	optional bytes type_string = 11;
+    optional int32 status = 12;//特征状态：0==未标注;1==已标注
+	optional bytes engine = 13;//引擎
+	optional bytes create_time = 14;//创建时间
+	optional bytes update_time = 15;//更新时间
+	optional bytes editor = 16;//编辑者
+	optional bytes name = 17;//特征名称
+	optional bytes desc = 18;//特征描述	
+}
+
+message IdentifySearchResultRequest {
+	required int32 option = 1 [default = 0];//数据库选项:0表示不更新数据库;1表示发现新特征更新数据库;2表示提交结果到数据库
+	required bytes engine = 2;//引擎
+	required SearchResult search_result = 3;//搜索结果
+	optional bytes query = 4;//查询query
+	optional bytes request_url = 5;//查询url
+	optional bytes snapshot_addr = 6;//快照页面地址
+}
+
+message IdentifySearchResultResponse {
+    required int32 retcode = 1;//返回码:0表示成功;非0请求失败
+    required bytes rettext = 2;//返回码的文字描述
+	required int32 option = 3;//数据库选项:0表示不更新数据库;1表示发现新特征更新数据库;2表示提交结果到数据库
+	required bytes engine = 4;//引擎
+	optional int32 base_class_id = 5 [default = 0];//基础分类ID，0表示为命中，下同
+    optional int32 feature_id = 6 [default = 0];//创建基础分类的特征ID
+    optional int32 structure_id = 7 [default = 0];
+    optional int32 node_info_id = 8 [default = 0];
+    optional int32 type_string_id = 9 [default = 0];
+}
+
+// The server side serivce.
+service SrssService {
+    // The service timeout is 5 seconds.
+	
+    rpc SearchFeatureByID(SearchByIDRequest) returns(SearchFeatureResponse);
+    
+	rpc SearchFeatureByContent(SearchFeatureByContentRequest) returns(SearchFeatureResponse);
+	
+	rpc SearchBaseClassByID(SearchByIDRequest) returns(SearchBaseClassResponse);
+    
+	rpc SearchBaseClassByContent(SearchBaseClassByContentRequest) returns(SearchBaseClassResponse);
+    
+    rpc IdentifySearchResult(IdentifySearchResultRequest) returns(IdentifySearchResultResponse);
+}
+

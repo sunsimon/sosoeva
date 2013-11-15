@@ -1,0 +1,33 @@
+// Copyright (c) 2013, Tencent Inc.
+// All rights reserved
+//
+// Author: Manzhao BU <chillbu@tencent.com>
+//
+// Defnine SearchResultPage Request & Response
+
+import "./search_result.proto";
+
+package soso_proto;
+
+message SearchResultPageRequest {
+    required bytes html = 1;
+	required bytes engine = 2;
+	required bool is_rebuild = 3 [default = false];
+	optional bytes query = 4;
+	optional bytes request_url = 5;
+	optional bytes snapshot_addr = 6;
+	optional bytes file_name = 7;
+	optional bytes encoding = 8;	
+}
+
+message SearchResultPageResponse {
+    required int32 retcode = 1;
+    required bytes rettext = 2;
+    optional bytes engine = 3;
+    optional bytes encoding = 4;
+	optional int32 result_num = 5;
+	optional int32 sub_result_num = 6;
+	optional bool is_rebuild = 7;
+	optional bytes rebuild_html = 8;
+    repeated SearchResult search_result = 9;	
+}
