@@ -1,0 +1,14 @@
+package soso_proto;
+message sogou_meta_send
+{
+    optional string    query = 1;  // query
+    optional string    engine =  2;  // engine
+    optional string    html = 3; // most important 
+}
+
+message sogou_meta_resp
+{
+    optional int32  status =1; //1 ok
+    optional string content = 2; //html string
+}
+
